@@ -1,11 +1,10 @@
 <script setup>
-import UserCard from './components/UserCard.vue';
+import NavBar from './components/NavBar.vue';
+
 </script>
 
 <template>
-    <div class="flex justify-center gap-2">
-        <UserCard />
-        <!-- <UserCard />
-        <UserCard /> -->
-    </div>
+    <main>
+        <RouterView />
+    </main>
 </template>
