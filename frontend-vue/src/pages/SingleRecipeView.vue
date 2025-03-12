@@ -1,11 +1,11 @@
 <script setup>
-import { useRoute, useRouter } from 'vue-router';
+import ModalEditRecipe from '../components/modals/ModalEditRecipe.vue';
+import ModalDeleteRecipe from '../components/modals/ModalDeleteRecipe.vue';
+import { useRoute } from 'vue-router';
 import { getRecipeByUserAndId } from '../api/recipes';
 import { ref, onMounted } from 'vue';
-import { Button } from 'primevue';
 
 const route = useRoute();
-const router = useRouter();
 const id_user = route.params.id_user;
 const id_recipe = route.params.id_recipe;
 
@@ -36,21 +36,20 @@ onMounted(fetchRecipeByUser);
                 <h1 class="text-2xl font-bold">{{ recipe.title }}</h1>
             </div>
 
-            <div class="container mx-auto p-2">
-                <div class="bg-white p-2 rounded-lg shadow-lg">
-                    <img :src="recipe.image" :alt="recipe.title" class="w-full h-80 object-cover rounded-md mb-6" />
-
-                    <div>
-                        <h2 class="text-xl font-semibold text-gray-800">Preparation Steps</h2>
-                        <p class="mt-4 text-gray-600">{{ recipe.steps }}</p>
-                    </div>
-
-                    <!-- Botones de Editar y Eliminar -->
-                    <div class="mt-8 flex justify-end gap-1 items-center">
-                        <Button v-tooltip.top="{ value: 'Update', showDelay: 100 }" icon="pi pi-pencil" severity="warn"
-                            label="Update" />
-                        <Button v-tooltip.top="{ value: 'Delete', showDelay: 100 }" icon="pi pi-trash" severity="danger"
-                            label="Delete" />
+            <div class="container mx-auto">
+                <div class="bg-white p-4">
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="w-full md:w-1/2 h-64 md:h-64 rounded-md border border-gray-300 overflow-hidden">
+                            <img :src="recipe.image" :alt="recipe.title" class="w-full h-full object-cover" />
+                        </div>
+                        <div class="w-full md:w-1/2">
+                            <h2 class="text-xl font-semibold text-gray-800">Preparation Steps</h2>
+                            <p class="mt-4 text-gray-600">{{ recipe.steps }}</p>
+                            <div class="mt-4 flex justify-end gap-2 items-center">
+                                <ModalEditRecipe />
+                                <ModalDeleteRecipe />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

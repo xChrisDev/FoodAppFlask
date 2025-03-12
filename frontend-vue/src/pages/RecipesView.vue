@@ -1,6 +1,6 @@
 <script setup>
+import ModalAddRecipe from '../components/modals/ModalAddRecipe.vue';
 import RecipeCard from '../components/RecipeCard.vue';
-import { Button } from 'primevue';
 import { onMounted, ref } from 'vue';
 import { getAllRecipesByUser } from '../api/recipes';
 import { useRoute } from 'vue-router';
@@ -12,13 +12,21 @@ const id_user = route.params.id_user;
 const user = ref(null);
 const recipes = ref([]);
 const loading = ref(true);
+const errorMessage = ref("");
 
 const fetchUserAndRecipes = async () => {
     try {
         user.value = await getUserById(id_user);
-        recipes.value = await getAllRecipesByUser(id_user);
+        const response = await getAllRecipesByUser(id_user);
+
+        if (response.error) {
+            errorMessage.value = response.error;
+        } else {
+            recipes.value = response;
+        }
     } catch (error) {
-        console.error('Error fetching data:', error);
+        // console.error('Error fetching data:', error);
+        errorMessage.value = "This user doesnt have recipes!";
     } finally {
         loading.value = false;
     }
@@ -34,21 +42,25 @@ onMounted(fetchUserAndRecipes);
         </div>
 
         <div v-else>
-            <div class="text-center mb-8">
-                <img :src="user.profile_photo" alt="Foto de perfil"
+            <div class="text-center mb-4">
+                <img :src="user[0].profile_photo" alt="Foto de perfil"
                     class="w-24 h-24 shadow-xl rounded-full mx-auto object-cover mb-4" />
 
-                <h2 class="text-2xl pb-1 font-bold">{{ user.name }} {{ user.surname }}</h2>
-                <p class="text-md font-medium">{{ user.type }}</p>
+                <h2 class="text-2xl pb-1 font-bold">{{ user[0].name }} {{ user[0].surname }}</h2>
+                <p class="text-md font-medium">{{ user[0].type }}</p>
             </div>
 
-            <div class="w-full flex justify-end px-6 my-4">
-                <Button v-tooltip.left="{ value: 'Add new recipe', showDelay: 100 }" label="New recipe"
-                    icon="pi pi-plus" severity="success" />
+            <div class="w-full flex justify-between px-6 my-4">
+                <h3 class="text-2xl font-bold">Recipes <i class="pi pi-face-smile w-8 h-8"></i> </h3>
+                <ModalAddRecipe />
             </div>
 
-            <div class="w-full max-w-6xl px-6">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div v-if="errorMessage" class="w-[500px] max-w-6xl px-6 text-center mt-10">
+                <p class="text-2xl font-semibold text-red-500">{{ errorMessage }}</p>
+            </div>
+
+            <div v-else class="w-full max-w-6xl px-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     <RecipeCard v-for="recipe in recipes" :key="recipe.id" :recipe="recipe" />
                 </div>
             </div>

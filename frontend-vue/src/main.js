@@ -5,10 +5,12 @@ import PrimeVue from "primevue/config";
 import Aura from "@primeuix/themes/aura";
 import Tooltip from "primevue/tooltip";
 import router from "./routes/router";
+import ToastService from 'primevue/toastservice';
 
 const app = createApp(App);
 app.directive("tooltip", Tooltip);
 app.use(router);
+app.use(ToastService);
 app.use(PrimeVue, {
   theme: {
     preset: Aura,

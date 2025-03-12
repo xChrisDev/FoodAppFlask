@@ -1,9 +1,13 @@
 <script setup>
 import Button from 'primevue/button';
+import ModalEditUser from './modals/ModalEditUser.vue';
+import ModalDeleteUser from './modals/ModalDeleteUser.vue';
 
 const props = defineProps({
     user: { type: Object }
 })
+
+const emit = defineEmits(['edit', 'delete']);
 
 </script>
 
@@ -15,10 +19,8 @@ const props = defineProps({
                 <div class="flex justify-between items-center">
                     <h2 class="font-semibold text-lg text-gray-900">{{ props.user.name }} {{ props.user.surname }}</h2>
                     <div class="flex gap-1">
-                        <Button v-tooltip.top="{ value: 'Update', showDelay: 100 }" icon="pi pi-pen-to-square"
-                            size="small" severity="warn" rounded />
-                        <Button v-tooltip.top="{ value: 'Delete', showDelay: 100 }" icon="pi pi-times" size="small"
-                            severity="danger" rounded />
+                        <ModalEditUser :user="props.user" @edit_user="emit('edit')" />
+                        <ModalDeleteUser :id_user="props.user.id_user" @delete_user="emit('delete')" />
                     </div>
                 </div>
                 <p class="text-gray-600 text-sm mt-1">{{ props.user.type }}</p>

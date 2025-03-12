@@ -16,7 +16,7 @@ def get_all_users():
 def get_single_user(id_user: int):
     user_found = [user for user in users if user["id_user"] == id_user]
     if user_found:
-        return jsonify(user_found[0]), 200
+        return jsonify(user_found), 200
     return jsonify({"error": "User not found!"}), 404
 
 
