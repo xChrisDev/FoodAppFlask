@@ -1,6 +1,7 @@
 <script setup>
-import { onMounted, ref } from 'vue';
 import RecipeCard from '../components/RecipeCard.vue';
+import { Button } from 'primevue';
+import { onMounted, ref } from 'vue';
 import { getAllRecipesByUser } from '../api/recipes';
 import { useRoute } from 'vue-router';
 import { getUserById } from '../api/users';
@@ -19,7 +20,7 @@ const fetchUserAndRecipes = async () => {
     } catch (error) {
         console.error('Error fetching data:', error);
     } finally {
-        loading.value = false; 
+        loading.value = false;
     }
 }
 
@@ -33,12 +34,17 @@ onMounted(fetchUserAndRecipes);
         </div>
 
         <div v-else>
-            <div class="text-center mb-12 ">
+            <div class="text-center mb-8">
                 <img :src="user.profile_photo" alt="Foto de perfil"
-                    class="w-32 h-32 shadow-xl rounded-full mx-auto object-cover mb-4" />
+                    class="w-24 h-24 shadow-xl rounded-full mx-auto object-cover mb-4" />
 
-                <h2 class="text-4xl pb-1 font-bold">{{ user.name }} {{ user.surname }}</h2>
-                <p class="text-xl font-medium">{{ user.type }}</p>
+                <h2 class="text-2xl pb-1 font-bold">{{ user.name }} {{ user.surname }}</h2>
+                <p class="text-md font-medium">{{ user.type }}</p>
+            </div>
+
+            <div class="w-full flex justify-end px-6 my-4">
+                <Button v-tooltip.left="{ value: 'Add new recipe', showDelay: 100 }" label="New recipe"
+                    icon="pi pi-plus" severity="success" />
             </div>
 
             <div class="w-full max-w-6xl px-6">
