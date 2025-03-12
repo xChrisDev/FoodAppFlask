@@ -32,7 +32,9 @@ const fetchUsers = async () => {
     }
 };
 
-onMounted(fetchUsers);
+onMounted(() => {
+    fetchUsers();
+});
 </script>
 
 <template>

@@ -82,7 +82,7 @@ def get_single_recipe_by_user(id_user: int, id_recipe: int):
 def post_recipe(id_user: int):
     if request.is_json:
         response = request.get_json()
-        if "name" not in response or "ingredients" not in response or "instructions" not in response:
+        if "title" not in response or "steps" not in response:
             return jsonify({"error": "Missing fields!"}), 400
         response["id_recipe"] = get_last_recipe_id()
         response["id_user"] = id_user
@@ -98,9 +98,9 @@ def put_recipe(id_user: int, id_recipe: int):
         recipe_found = [recipe for recipe in recipes if recipe["id_user"] == id_user and recipe["id_recipe"] == id_recipe]
         if recipe_found:
             recipe = recipe_found[0]
-            recipe["name"] = request.json.get("name") or recipe["name"]
-            recipe["ingredients"] = request.json.get("ingredients") or recipe["ingredients"]
-            recipe["instructions"] = request.json.get("instructions") or recipe["instructions"]
+            recipe["title"] = request.json.get("title") or recipe["title"]
+            recipe["steps"] = request.json.get("steps") or recipe["steps"]
+            recipe["image"] = request.json.get("image") or recipe["image"]
             return jsonify({"message": "Recipe updated successfully", "recipe": recipe}), 200
         else:
             return jsonify({"error": "Recipe not found!"}), 404

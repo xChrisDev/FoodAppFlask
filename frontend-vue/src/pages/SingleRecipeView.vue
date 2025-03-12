@@ -46,8 +46,8 @@ onMounted(fetchRecipeByUser);
                             <h2 class="text-xl font-semibold text-gray-800">Preparation Steps</h2>
                             <p class="mt-4 text-gray-600">{{ recipe.steps }}</p>
                             <div class="mt-4 flex justify-end gap-2 items-center">
-                                <ModalEditRecipe />
-                                <ModalDeleteRecipe />
+                                <ModalEditRecipe :recipe="recipe" @update_recipe="fetchRecipeByUser" />
+                                <ModalDeleteRecipe :recipe="recipe" @delete_recipe="fetchRecipeByUser" />
                             </div>
                         </div>
                     </div>

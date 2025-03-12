@@ -3,9 +3,11 @@ import ModalAddRecipe from '../components/modals/ModalAddRecipe.vue';
 import RecipeCard from '../components/RecipeCard.vue';
 import { onMounted, ref } from 'vue';
 import { getAllRecipesByUser } from '../api/recipes';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { getUserById } from '../api/users';
+import { Button } from 'primevue';
 
+const router = useRouter();
 const route = useRoute();
 const id_user = route.params.id_user;
 
@@ -18,6 +20,7 @@ const fetchUserAndRecipes = async () => {
     try {
         user.value = await getUserById(id_user);
         const response = await getAllRecipesByUser(id_user);
+        errorMessage.value = "";
 
         if (response.error) {
             errorMessage.value = response.error;
@@ -25,14 +28,20 @@ const fetchUserAndRecipes = async () => {
             recipes.value = response;
         }
     } catch (error) {
-        // console.error('Error fetching data:', error);
-        errorMessage.value = "This user doesnt have recipes!";
+        errorMessage.value = "This user doesn't have recipes!";
     } finally {
         loading.value = false;
     }
+};
+
+const redirectHome = () => {
+    router.push('/')
 }
 
-onMounted(fetchUserAndRecipes);
+onMounted(() => {
+    fetchUserAndRecipes();
+});
+
 </script>
 
 <template>
@@ -51,8 +60,8 @@ onMounted(fetchUserAndRecipes);
             </div>
 
             <div class="w-full flex justify-between px-6 my-4">
-                <h3 class="text-2xl font-bold">Recipes <i class="pi pi-face-smile w-8 h-8"></i> </h3>
-                <ModalAddRecipe />
+                <Button icon="pi pi-home" severity="contrast" label="Home" @click="redirectHome"/>
+                <ModalAddRecipe :id_user="parseInt(id_user)" @add_recipe="fetchUserAndRecipes" />
             </div>
 
             <div v-if="errorMessage" class="w-[500px] max-w-6xl px-6 text-center mt-10">
